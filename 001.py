@@ -587,24 +587,373 @@ print(s1)
 添加：
 s1.add()
 *****可以添加重复的但会自动滤过
+*****添加列表或字典会报错因为他们可变，即set的元素不能时列表或字典，但元组可以
+
+插入： *****整个列表字符串字典，打碎插入 *****"sunck" >> "s" "u" "n" "c" "k"
+s1.update(列表)
+
+删除：
+s1.remove(要删除元素)
+ 
+遍历：
+s1 = set([1, 2, 3, 4])
+for i in s1:
+	print(i)
+*****set没有索引
+
+交集： s1 & s2
+并集： s1 | s2
+
+利用set给list去重： s = set(l) l = s
 
 
 
+#迭代
+可迭代对象(Iterable)：可以直接作用于 for 循环的对象，可以用isinstance(对象, Iterable)判断
+一般分为两类：
+	1.集合数据类型：list tuple dict set string
+	2.generator，包括生成器和带yield的generator function
 
 
+迭代器(Iterator)：可以被next()函数调用并不断返回下一个值的对象成为迭代器,isinstance(对象， Iterator)
+不但可以作用于for循环，还可以被next()函数不断调用并返回下一个值，知道最后会返回一个StopIteration错误，结束循环
 
+x for x in range(3)：返回一个迭代器
+print(next(x)) >>> 0
+print(next(x)) >>> 1
+print(next(x)) >>> 2
+print(next(x)) >>> 3
 
-
-
-
-
-
-
-
+转成Iterator:
+iter(要转的对象)  *****列表字典元组字符串
  
  
  
+#函数
+认识：在一完整的项目中，某些功能会反复的使用，那么会将功能封装为函数，当我们想使用这个功能时直接调用这个函数
+本质：对功能的封装
+优点：1,简化代码的结构，增加了代码的复用度
+      2,如果想修改某些功能或者某个BUG，修改对应的函数即可
+
+定义函数：
+格式：
+def 函数名(参数列表):
+	语句
+	return 表达式
+*****def:函数代码块以def关键字开始
+*****函数名：遵循标识符原则
+*****()：参数结束和开始
+*****参数列表(参数1， 参数2.....参数n):任何传入函数的参数和变量必须放在圆括号之间，用逗号分隔，函数从函数调用者那里获取的信息
+*****语句：函数封装的功能
+*****return：用于结束函数，并返回信息给函数的调用者
+*****表达式：返回给函数调用者的信息
+!!!!!表达式可以不写默认 return None
+
+函数的调用:
+格式:
+函数名(参数列表)
+*****函数名:要使用的功能的函数的名字
+*****参数列表:函数调用者给函数传递的信息，没有参数括号不可省略
+本质：实参给形参赋值的过程
+
+函数的参数:
+形参(形式参数):定时函数时小括号中的名字，本质是一个名字，不占用内存空间
+实参(实际参数):函数调用时给函数的变量，本质是一个变量，已经占用内存空间
+!!!!!参数必须按顺序传递个数必须够
+
+函数的返回值：函数执行后返回给函数调用者的值
+
+传递参数:
+	按值传递:传递的是不可变类型(string tuple number等)传递的是值的拷贝，也就是说传递后就互不相关了
+	
+	引用传递:传递的是可变类型(list dict set等)传递的参数是按引用进行传递，其实传递的引用的地址，也就是变量所对应的内存空间的地址
+@@@@@引用传递和按值传递https://blog.csdn.net/a940659387/article/details/49993923
+
+关键字参数:允许函数调用时参数的顺序与定义时不一致
+使用：
+函数名(形参2=实参2，形参1=实参1)
+
+默认参数：调用函数时如果没有传递，则使用默认参数,定义时赋默认参数
+def func(num1 = 1, num2 = 2):
+	print(num1, num2)
+func()
+!!!!!要使用默认参数最好将默认参数放在最后
+
+不定长参数：能处理比定义时更多的参数。加了*的变量存放所有未命名的变量,没有传递参数时只是一个空元组
+def func1(形参1, *args):
+	print(形参1)
+	for x in args:
+		print(x)
+	return 返回值
+func1(实参1, 实参2, 实参3)
+
+def func2(**kwargs):
+	print(kwargs)
+	print(type(kwargs))
+
+func2(x=1,y=2,z=3)    *****实参必须是key-value类型键值对参数
+
+def func3(*args, **kwargs)
+
+匿名函数：不是用 def 这样的语句定义使用lambda来创建匿名函数
+特点：
+1,lambda只是一个表达式，函数体比def简单
+2,lambda的主体是一个表达式，而不是代码块，仅仅只能在lambda表达式中封装简单的逻辑
+3,lambda函数有自己的命名空间，且不能访问自由参数列表之外的或全局命名空间的参数
+4,虽然lambda是一个表达式且看起来只能写一行，与C和C++中的内联函数不同
+
+格式:
+lambda 参数1, 参数2,......：表达式
  
+
+
+#装饰器
+概念：是一个闭包，把一个函数当作参数返回一个替代版的函数
+本质：一个返回函数的函数
+
+简单装饰器：
+def func1():
+	print("sunck is a good man)
+
+def outer(func):
+	def inner():
+		print("****************")
+		func()
+	return inner
+	
+func1 = outer(func1)
+
+复杂装饰器：
+def outer(func):
+	def inner(age):
+		if age < 0:
+			age = 0
+		func(age)
+	return inner
+
+@outer               *****等价say = outer(say)
+def say(age):
+	print("sunck is %d years old" % (age))
+
+*****当前装饰器只能用于只有一个参数的函数
+
+通用装饰器：
+def outer(func):
+	def inner(*args, **kwargs):
+		print("*********")     *****增加功能
+		func(*args, **kwargs)  *****原函数功能
+	return inner 
+
+@outer
+def say(name, age):             *****函数的参数理论上是无限的但最好不要超过6，7个
+	print("My name is %s, I am %d years old" % (name, age)
+
+
+
+#偏函数：
+概念:
+print ("1010", base = 2)      >>> 10  *****将1010按照二进制来计算返回十进制的数
+
+def int1(str1, base = 2):
+	return int(str, base)     *****函数的参数控制
+	
+import functools
+int2 = functools.partial(int, base = 2)  *****把一个参数控制，形成一个新函数
+
+
+
+#变量的作用域
+概念：变量可以使用的范围，程序的变量并不是在所有位置都能使用的，访问权限决定于变量在哪里赋值
+
+局部作用域：
+全局作用域：
+内键作用域：
+
+
+
+#异常处理
+概念：
+
+需求：当程序遇到问题时不让程序结束，而是越过错误让程序向下进行
+
+语句：
+try.....except.....else
+格式：
+try:
+	语句t
+except 错误码 as e:
+	语句1
+except 错误码 as e:
+	语句2
+except 错误码 as e:
+	语句n
+else:                       *****可有可无
+	语句m
+
+用来检测try语句块中的错误用 except 来捕获错误信息并处理
+逻辑:当程序执行到 try.....except.....else 语句时：
+	1，如果 try “语句t”执行出现错误，会匹配第一个错误码，如果匹配上就执行对应的语句
+	2，如果 try “语句t”执行出现错误，没有匹配的异常，错误将会提交到上一层的 try 语句，或者到程序的最上层
+	3，如果 try “语句t”执行没有出现错误，但会执行 else 下的语句
+	
+try:
+	语句
+except:
+	print("程序出现异常")
+****不匹配异常，生成异常日志，越过错误
+
+try:
+	语句t
+except (错误码1, 错误码2):
+	语句1
+*****用一个 except 匹配多个错误码
+
+特殊1：
+try:
+	print(5 / 0)
+except BaseExceptin as e:      *****错误其实是类(class)，所有的错误都继承BaseException
+	print("异常1")
+except ZeroDivisionError as e:
+	print("异常1")
+>>> 异常1
+
+特殊2： 
+def func1(num):
+	print(1 / num)
+def func2(num):
+	func1(num)
+def main():
+	func2(0)
+main()
+
+try:
+	main()
+except ZeroDivisionError as e:
+	print("异常")	
+	
+>>> 异常	
+*****跨越多层调用，func1出现了错误，这时只要调用main()就能捕获并处理错误
+
+
+语句：
+try.....except.....finally
+格式：
+try:
+	语句t
+except 错误码 as e:
+	语句1
+except 错误码 as e:
+	语句2
+except 错误码 as e:
+	语句n
+finally:                       
+	语句f
+作用：语句t无论有没有错误都会执行语句f
+
+
+断言：
+def func(num, div):
+
+	assert(div != 0), "div不能为0"
+	return num / div
+
+print(func(10, 0))
+
+
+
+#文件处理
+文件读写：
+1，打开文件：
+open(path, flag[, encoding][, errors])
+path:要打开文件的内容
+flag:打开方式
+	r     以只读的方式打开文件，文件的描述符放在文件的开头
+	rb    以二进制格式打开一个文件用于制度，文件的描述符在开头
+	r+    打开一个文件用于读写，文件的描述符放在开头
+	w     以写入的方式打开一个文件，文件的描述符放在开头，如果该文件存在会覆盖，如果不存在则会创建新文件
+	wb    打开一个文件只用于写入二进制，如果该文件存在会覆盖，如果不存在则会创建新文件
+	w+    打开一个文件只用于读写
+	a     打开一个文件用于追加，如果文件存在，文件描述符将会放在文件末尾，
+	a+    打开一个文件只用于追加
+	
+	
+	
+	
+encoding:编码方式    *****打开时与创建时文件编码需一致
+
+
+
+f = open()
+2，读文件内容：
+读取文件的全部内容:
+str1 = f.read()   *****用于文件较小时
+
+str1 = f.read(10) *****读取文件的指定字符数
+str2 = f.read(10) *****下十个字符
+
+读取整行，包括"/n"字符
+str1 = f.readline()     *****读取第一行
+str2 = f.readline()     *****读取第二行
+str3 = f.readline(10)     *****读取第一行的十个字符
+
+读取所有行并返回列表
+list1 = f.readlines()     
+list2 = f.readlines(10)     *****返回含十个字符的行数，但为凑正行，实际字符数可能大于10
+
+f.seek(n)                   *****可以修改文件描述符的位置
+
+
+3，关闭文件
+f.cloce()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
  
  
